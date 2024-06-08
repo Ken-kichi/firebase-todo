@@ -36,7 +36,6 @@ const getTopicById = async (id:string) => {
 const TopicDetail = async ({params}:{params:{id:string}}) => {
   const {id} = params
   const topic = await getTopicById(id)
-  console.log(topic)
 
   return (
     <TopicContents topic={topic} />
