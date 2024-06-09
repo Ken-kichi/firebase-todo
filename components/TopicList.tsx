@@ -29,7 +29,6 @@ const TopicList = () => {
 /** トピックの一覧を取得する */
   return (
     <>
-    {topics?.length === 0  && <p>データがありません</p>}
     {topics?.map((topic:Topic) => (
       <Card key={topic.id} sx={{ m: 2}}>
             <CardContent>
