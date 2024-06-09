@@ -4,7 +4,6 @@ import { db } from "@/lib/database"
 import { Topic } from "@/types/types"
 import { Box, Button, FormControlLabel, Switch, TextField } from "@mui/material"
 import { doc, updateDoc } from "firebase/firestore"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 const TopicContents = ({topic}:{topic:Topic}) => {
@@ -13,17 +12,16 @@ const TopicContents = ({topic}:{topic:Topic}) => {
   const [newDescription,setNewDescription] = useState<string>(description)
   const [isEdit,setIsEdit] = useState<boolean>(true)
 
-const router = useRouter()
 
 const onSubmit = async () => {
   try{
     const washingtonRef = doc(db, "nextjs-todo", id);
-    await updateDoc(washingtonRef, {
+     await updateDoc(washingtonRef, {
       title: newTitle,
       description:newDescription
     });
-    router.refresh()
-    router.push("/")
+    setNewTitle(newTitle)
+    setNewDescription(newDescription)
   }catch(error){
     console.log(error)
   }

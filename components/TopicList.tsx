@@ -1,15 +1,36 @@
+"use client"
+
 import DeleteButton from "@/components/DeleteButton"
-import { getTopics } from "@/services/service"
+import { db } from "@/lib/database"
 import { Topic } from "@/types/types"
 import { Button, Card, CardActions, CardContent } from '@mui/material'
 import Typography from '@mui/material/Typography'
-const TopicList = async () => {
-  const topics = await getTopics()
+import { collection, onSnapshot, query } from "firebase/firestore"
+import { useEffect, useState } from "react"
 
+const TopicList = () => {
+  const [topics,setTopics] = useState<Topic[]>([])
+  useEffect(()=>{
+    const q = query(collection(db,"nextjs-todo"))
+    const unsub = onSnapshot(q,(snapshot)=>{
+      setTopics(
+        snapshot.docs.map((doc)=>({
+          id: doc.id,
+          title: doc.data().title,
+          description: doc.data().description
+        }))
+      )
+    })
+    return ()=>{
+      unsub()
+    }
+
+  },[])
+/** トピックの一覧を取得する */
   return (
     <>
-    {topics.length === 0 && <p>データがありません</p>}
-    {topics.map((topic:Topic) => (
+    {topics?.length === 0  && <p>データがありません</p>}
+    {topics?.map((topic:Topic) => (
       <Card key={topic.id} sx={{ m: 2}}>
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
